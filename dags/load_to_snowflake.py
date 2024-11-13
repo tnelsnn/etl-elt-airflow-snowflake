@@ -39,9 +39,9 @@ t_log = logging.getLogger("airflow.task")
 
 # Snowflake variables - REPLACE with your own values
 _SNOWFLAKE_CONN_ID = os.getenv("SNOWFLAKE_CONN_ID", "snowflake_default")
-_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "ETL_DEMO")
-_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEV")
-_SNOWFLAKE_STAGE_NAME = os.getenv("SNOWFLAKE_STAGE_NAME", "ETL_STAGE")
+_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "DEMO_DB")
+_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEMO_SCHEMA")
+_SNOWFLAKE_STAGE_NAME = os.getenv("SNOWFLAKE_STAGE_NAME", "DEMO_STAGE")
 
 LIST_OF_BASE_TABLE_NAMES = ["users", "teas", "utms"]
 

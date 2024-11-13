@@ -23,8 +23,8 @@ import logging
 import os
 
 _SNOWFLAKE_CONN_ID = os.getenv("SNOWFLAKE_CONN_ID", "snowflake_default")
-_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "ETL_DEMO")
-_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEV")
+_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "DEMO_DB")
+_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEMO_DB")
 
 dag_directory = os.path.dirname(os.path.abspath(__file__))
 

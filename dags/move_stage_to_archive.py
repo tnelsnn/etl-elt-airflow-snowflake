@@ -17,8 +17,8 @@ from include.utils import get_all_files, get_all_checksums, compare_checksums
 t_log = logging.getLogger("airflow.task")
 
 # Snowflake variables
-_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "ETL_DEMO")
-_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEV")
+_SNOWFLAKE_DB_NAME = os.getenv("SNOWFLAKE_DB_NAME", "DEMO_DB")
+_SNOWFLAKE_SCHEMA_NAME = os.getenv("SNOWFLAKE_SCHEMA_NAME", "DEMO_SCHEMA")
 
 # S3 variables
 _AWS_CONN_ID = os.getenv("AWS_CONN_ID")
