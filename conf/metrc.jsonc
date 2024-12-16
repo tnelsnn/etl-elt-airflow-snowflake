@@ -1,0 +1,813 @@
+[
+    // Facilities
+    {
+        "system": "metrc",
+        "entity": "facilities",
+        "pull_parameters": {},
+        "pull_endpoint": "/facilities/v2/",
+        "result_path": [],
+        "primary_key": "Name",
+        "schema": {
+            "HireDate": "DATE",
+            "IsOwner": "BOOLEAN",
+            "IsManager": "BOOLEAN",
+            "Occupations": "VARIANT",
+            "Name": "VARCHAR(255)",
+            "Alias": "VARCHAR",
+            "DisplayName": "VARCHAR",
+            "CredentialedDate": "DATETIME",
+            "SupportActivationDate": "DATETIME",
+            "SupportExpirationDate": "DATETIME",
+            "SupportLastPaidDate": "DATETIME",
+            "FacilityType": "VARIANT",
+            "License": "VARIANT",
+            "IsFinancialContact":"BOOLEAN"
+        },
+        "migration_only": false
+    },
+    // Employees
+    {
+        "system": "metrc",
+        "entity": "employees",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/employees/v2?licenseNumber={licenseNumber}",
+        "result_path": [
+            "Data"
+        ],
+        "primary_key": "FullName",
+        "schema": {
+            "FullName": "VARCHAR(255)",
+            "License": "VARIANT"
+        },
+        "migration_only": false
+    },
+    // Harvests 
+    {
+        "system": "metrc",
+        "entity": "harvests",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "onhold"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/harvests/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "HarvestType": "VARCHAR(255)",
+            "SourceStrainCount": "INTEGER",
+            "SourceStrainNames": "VARIANT",
+            "Strains": "VARIANT",
+            "DryingLocationId": "INTEGER",
+            "DryingLocationName": "VARCHAR(255)",
+            "DryingLocationTypeName": "VARCHAR(255)",
+            "PatientLicenseNumber": "VARCHAR(255)",
+            "CurrentWeight": "DECIMAL(38,2)",
+            "TotalWasteWeight": "DECIMAL(38,2)",
+            "PlantCount": "INTEGER",
+            "TotalWetWeight": "DECIMAL(38,2)",
+            "TotalRestoredWeight": "DECIMAL(38,2)",
+            "PackageCount": "INTEGER",
+            "TotalPackagedWeight": "DECIMAL(38,2)",
+            "UnitOfWeightName": "VARCHAR(255)",
+            "LabTestingState": "VARCHAR(255)",
+            "LabTestingStateDate": "DATE",
+            "IsOnHold": "BOOLEAN",
+            "HarvestStartDate": "DATE",
+            "FinishedDate": "DATE",
+            "ArchivedDate": "DATE",
+            "IsOnTrip": "BOOLEAN",
+            "LastModified": "TIMESTAMP"
+        },
+        "migration_only": true /*,
+        "paging": {
+            "from_field": "lastModifiedStart",
+            "to_field": "lastModifiedEnd",
+            "format": "date",
+            "format_str": "%Y-%m-%dT%H:%M:%SZ",
+            "interval":365
+        }*/
+    },
+    // Items
+    {
+        "system": "metrc",
+        "entity": "items",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/items/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "ProductCategoryName": "VARCHAR(255)",
+            "ProductCategoryType": "VARCHAR(255)",
+            "IsExpirationDateRequired": "BOOLEAN",
+            "HasExpirationDate": "BOOLEAN",
+            "IsSellByDateRequired": "BOOLEAN",
+            "HasSellByDate": "BOOLEAN",
+            "IsUseByDateRequired": "BOOLEAN",
+            "HasUseByDate": "BOOLEAN",
+            "QuantityType": "VARCHAR(255)",
+            "DefaultLabTestingState": "VARCHAR(255)",
+            "UnitOfMeasureName": "VARCHAR(255)",
+            "ApprovalStatus": "VARCHAR(255)",
+            "ApprovalStatusDateTime": "DATETIME",
+            "StrainId": "INTEGER",
+            "StrainName": "VARCHAR(255)",
+            "ItemBrandId": "INTEGER",
+            "ItemBrandName": "VARCHAR(255)",
+            "AdministrationMethod": "VARCHAR(255)",
+            "UnitCbdPercent": "DECIMAL(38,2)",
+            "UnitCbdContent": "DECIMAL(38,2)",
+            "UnitCbdContentUnitOfMeasureName": "VARCHAR(255)",
+            "UnitCbdContentDose": "DECIMAL(38,2)",
+            "UnitCbdContentDoseUnitOfMeasureName": "VARCHAR(255)",
+            "UnitThcPercent": "DECIMAL(38,2)",
+            "UnitThcContent": "DECIMAL(38,2)",
+            "UnitThcContentUnitOfMeasureName": "VARCHAR(255)",
+            "UnitThcContentDose": "DECIMAL(38,2)",
+            "UnitThcContentDoseUnitOfMeasureName": "VARCHAR(255)",
+            "UnitVolume": "DECIMAL(38,2)",
+            "UnitVolumeUnitOfMeasureName": "VARCHAR(255)",
+            "UnitWeight": "DECIMAL(38,2)",
+            "UnitWeightUnitOfMeasureName": "VARCHAR(255)",
+            "ServingSize": "DECIMAL(38,2)",
+            "SupplyDurationDays": "INTEGER",
+            "NumberOfDoses": "INTEGER",
+            "UnitQuantity": "INTEGER",
+            "UnitQuantityUnitOfMeasureName": "VARCHAR(255)",
+            "PublicIngredients": "VARIANT",
+            "Description": "VARCHAR(255)",
+            "Allergens": "VARIANT",
+            "ProductImages": "VARIANT",
+            "ProductPhotoDescription": "VARIANT",
+            "LabelImages": "VARIANT",
+            "LabelPhotoDescription": "VARIANT",
+            "PackagingImages": "VARIANT",
+            "PackagingPhotoDescription": "VARCHAR(255)",
+            "ProductPDFDocuments": "VARIANT",
+            "IsUsed": "BOOLEAN",
+            "LabTestBatchNames": "VARIANT"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "items_categories",
+        "pull_endpoint": "/items/v2/categories?licenseNumber={licenseNumber}",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Name",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Name": "VARCHAR(255)",
+            "ProductCategoryType": "VARCHAR(255)",
+            "QuantityType": "VARCHAR(255)",
+            "RequiresStrain": "BOOLEAN",
+            "RequiresItemBrand": "BOOLEAN",
+            "RequiresAdministrationMethod": "BOOLEAN",
+            "RequiresUnitCbdPercent": "BOOLEAN",
+            "RequiresUnitCbdContent": "BOOLEAN",
+            "RequiresUnitCbdContentDose": "BOOLEAN",
+            "RequiresUnitThcPercent": "BOOLEAN",
+            "RequiresUnitThcContent": "BOOLEAN",
+            "RequiresUnitThcContentDose": "BOOLEAN",
+            "RequiresUnitVolume": "BOOLEAN",
+            "RequiresUnitWeight": "BOOLEAN",
+            "RequiresServingSize": "BOOLEAN",
+            "RequiresSupplyDurationDays": "BOOLEAN",
+            "RequiresNumberOfDoses": "BOOLEAN",
+            "RequiresPublicIngredients": "BOOLEAN",
+            "RequiresDescription": "BOOLEAN",
+            "RequiresAllergens": "BOOLEAN",
+            "RequiresProductPhotos": "INTEGER",
+            "RequiresProductPhotoDescription": "BOOLEAN",
+            "RequiresLabelPhotos": "INTEGER",
+            "RequiresLabelPhotoDescription": "BOOLEAN",
+            "RequiresPackagingPhotos": "INTEGER",
+            "RequiresPackagingPhotoDescription": "BOOLEAN",
+            "CanContainSeeds": "BOOLEAN",
+            "CanBeRemediated": "BOOLEAN",
+            "CanBeDestroyed": "BOOLEAN",
+            "RequiresProductPDFDocuments": "INTEGER",
+            "LabTestBatchNames": "VARCHAR(255)"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "items_brands",
+        "pull_endpoint": "/items/v2/brands?licenseNumber={licenseNumber}",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Id",
+        "schema": {
+            "Name": "VARCHAR(255)",
+            "Status": "VARCHAR(255)"
+        },
+        "migration_only": true
+    },
+    // Labtests
+    {
+        "system": "metrc",
+        "entity": "labtests_batches",
+        "pull_endpoint": "/labtests/v2/batches?licenseNumber={licenseNumber}",
+        "result_path":["Data"],
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Name",
+        "schema": {
+            "Name": "VARCHAR(255)",
+            "LabTestTypeCount": "INTEGER",
+            "LabTestTypes": "VARIANT", 
+            "ItemCategoryCount": "INTEGER",
+            "ItemCategories": "VARIANT"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "labtests_types",
+        "pull_endpoint": "/labtests/v2/types?licenseNumber={licenseNumber}",
+        "result_path":["Data"],
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Id",
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "RequiresTestResult": "BOOLEAN",
+            "InformationalOnly": "BOOLEAN",
+            "AlwaysPasses": "BOOLEAN",
+            "MaxAllowedFailureCount": "INTEGER",
+            "LabTestResultMode": "INTEGER",
+            "LabTestResultMinimum": "VARCHAR(255)",
+            "LabTestResultMaximum": "VARCHAR(255)",
+            "LabTestResultExpirationDays": "INTEGER",
+            "DependencyMode": "INTEGER"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "labtests_results",
+        "pull_endpoint": "/labtests/v2/results?licenseNumber={licenseNumber}",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Id",
+        "schema": {
+            "PackageId": "INTEGER",
+            "LabTestResultId": "INTEGER",
+            "LabFacilityLicenseNumber": "VARCHAR(255)",
+            "LabFacilityName": "VARCHAR(255)",
+            "SourcePackageLabel": "VARCHAR(255)",
+            "ProductName": "VARCHAR(255)",
+            "ProductCategoryName": "VARCHAR(255)",
+            "TestPerformedDate": "DATE",
+            "OverallPassed": "BOOLEAN",
+            "RevokedDate": "DATE",
+            "LabTestResultDocumentFileId": "INTEGER",
+            "ResultReleased": "BOOLEAN",
+            "ResultReleaseDateTime": "DATETIME",
+            "ExpirationDateTime": "DATETIME",
+            "TestTypeName": "VARCHAR(255)",
+            "TestPassed": "BOOLEAN",
+            "TestResultLevel": "DECIMAL(38,2)",
+            "TestComment": "VARCHAR(255)",
+            "TestInformationalOnly": "BOOLEAN",
+            "LabTestDetailRevokedDate": "DATE"
+        },
+        "migration_only": true
+    },
+    // Locations
+    {
+        "system": "metrc",
+        "entity": "locations",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/locations/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "LocationTypeId": "INTEGER",
+            "LocationTypeName": "VARCHAR(255)",
+            "ForPlantBatches": "BOOLEAN",
+            "ForPlants": "BOOLEAN",
+            "ForHarvests": "BOOLEAN",
+            "ForPackages": "BOOLEAN"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "locations_types",
+        "pull_endpoint": "/locations/v2/types?licenseNumber={licenseNumber}",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "primary_key": "Id",
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "ForPlantBatches": "BOOLEAN",
+            "ForPlants": "BOOLEAN",
+            "ForHarvests": "BOOLEAN",
+            "ForPackages": "BOOLEAN"
+        },
+        "migration_only": true
+    },
+    // Packages
+    {
+        "system": "metrc",
+        "entity": "packages",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "onhold",
+                "inactive",
+                "intransit"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/packages/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Label": "VARCHAR(255)",
+            "PackageType": "VARCHAR(255)",
+            "SourceHarvestCount": "INTEGER",
+            "SourcePackageCount": "INTEGER",
+            "SourceProcessingJobCount": "INTEGER",
+            "SourceHarvestNames": "VARIANT",
+            "SourcePackageLabels": "VARIANT",
+            "LocationId": "INTEGER",
+            "LocationName": "VARCHAR(255)",
+            "LocationTypeName": "VARCHAR(255)",
+            "Quantity": "DECIMAL(38,2)",
+            "UnitOfMeasureName": "VARCHAR(255)",
+            "UnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "PatientLicenseNumber": "VARCHAR(255)",
+            "ItemFromFacilityLicenseNumber": "VARCHAR(255)",
+            "ItemFromFacilityName": "VARCHAR(255)",
+            "Note": "VARCHAR(255)",
+            "PackagedDate": "DATE",
+            "ExpirationDate": "DATE",
+            "SellByDate": "DATE",
+            "UseByDate": "DATE",
+            "InitialLabTestingState": "VARCHAR(255)",
+            "LabTestingState": "VARCHAR(255)",
+            "LabTestingStateDate": "DATE",
+            "LabTestResultExpirationDateTime": "DATETIME",
+            "LabTestingRecordedDate": "DATE",
+            "IsProductionBatch": "BOOLEAN",
+            "ProductionBatchNumber": "INTEGER",
+            "SourceProductionBatchNumbers": "VARIANT",
+            "IsTradeSample": "BOOLEAN",
+            "IsTradeSamplePersistent": "BOOLEAN",
+            "SourcePackageIsTradeSample": "BOOLEAN",
+            "IsDonation": "BOOLEAN",
+            "IsDonationPersistent": "BOOLEAN",
+            "SourcePackageIsDonation": "BOOLEAN",
+            "IsTestingSample": "BOOLEAN",
+            "IsProcessValidationTestingSample": "BOOLEAN",
+            "ProductRequiresRemediation": "BOOLEAN",
+            "ContainsRemediatedProduct": "BOOLEAN",
+            "RemediationDate": "DATE",
+            "ReceivedDateTime": "DATETIME",
+            "ReceivedFromManifestNumber": "INTEGER",
+            "ReceivedFromFacilityLicenseNumber": "VARCHAR(255)",
+            "ReceivedFromFacilityName": "VARCHAR(255)",
+            "IsOnHold": "BOOLEAN",
+            "ArchivedDate": "DATE",
+            "FinishedDate": "DATE",
+            "IsOnTrip": "BOOLEAN",
+            "IsOnRetailerDelivery": "BOOLEAN",
+            "PackageForProductDestruction": "VARCHAR(255)",
+            "LastModified": "TIMESTAMP",
+            "Item": "VARIANT"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "packages_labsamples",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/packages/v2/labsamples?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "LabFacilityLicenseNumber": "VARCHAR(255)",
+            "LabFacilityName": "VARCHAR(255)",
+            "OverallPassed": "BOOLEAN",
+            "TestPerformedDate": "DATE",
+            "ResultReleased": "BOOLEAN",
+            "ResultReleaseDateTime": "DATETIME",
+            "LabTestResultExpirationDateTime": "DATETIME",
+            "TestTypeName": "VARCHAR(255)",
+            "TestPassed": "BOOLEAN",
+            "TestResultLevel": "DECIMAL(38,2)",
+            "TestComment": "VARCHAR(255)",
+            "TestInformationalOnly": "BOOLEAN",
+            "Id": "INTEGER",
+            "Label": "VARCHAR(255)",
+            "PackageType": "VARCHAR(255)",
+            "SourceHarvestCount": "INTEGER",
+            "SourcePackageCount": "INTEGER",
+            "SourceProcessingJobCount": "INTEGER",
+            "SourceHarvestNames": "VARCHAR(255)",
+            "SourcePackageLabels": "VARCHAR(255)",
+            "LocationId": "INTEGER",
+            "LocationName": "VARCHAR(255)",
+            "LocationTypeName": "VARCHAR(255)",
+            "Quantity": "DECIMAL(38,2)",
+            "UnitOfMeasureName": "VARCHAR(255)",
+            "UnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "PatientLicenseNumber": "VARCHAR(255)",
+            "ItemFromFacilityLicenseNumber": "VARCHAR(255)",
+            "ItemFromFacilityName": "VARCHAR(255)",
+            "Note": "VARCHAR(255)",
+            "PackagedDate": "DATE",
+            "ExpirationDate": "DATE",
+            "SellByDate": "DATE",
+            "UseByDate": "DATE",
+            "InitialLabTestingState": "VARCHAR(255)",
+            "LabTestingState": "VARCHAR(255)",
+            "LabTestingStateDate": "DATE",
+            "LabTestingRecordedDate": "DATE",
+            "IsProductionBatch": "BOOLEAN",
+            "ProductionBatchNumber": "INTEGER",
+            "SourceProductionBatchNumbers": "VARIANT",
+            "IsTradeSample": "BOOLEAN",
+            "IsTradeSamplePersistent": "BOOLEAN",
+            "SourcePackageIsTradeSample": "BOOLEAN",
+            "IsDonation": "BOOLEAN",
+            "IsDonationPersistent": "BOOLEAN",
+            "SourcePackageIsDonation": "BOOLEAN",
+            "IsTestingSample": "BOOLEAN",
+            "IsProcessValidationTestingSample": "BOOLEAN",
+            "ProductRequiresRemediation": "BOOLEAN",
+            "ContainsRemediatedProduct": "BOOLEAN",
+            "RemediationDate": "DATE",
+            "ReceivedDateTime": "DATETIME",
+            "ReceivedFromManifestNumber": "INTEGER",
+            "ReceivedFromFacilityLicenseNumber": "VARCHAR(255)",
+            "ReceivedFromFacilityName": "INTEGER",
+            "IsOnHold": "BOOLEAN",
+            "ArchivedDate": "DATE",
+            "FinishedDate": "DATE",
+            "IsOnTrip": "BOOLEAN",
+            "IsOnRetailerDelivery": "BOOLEAN",
+            "PackageForProductDestruction": "VARIANT",
+            "LastModified": "TIMESTAMP",
+            "Item": "VARIANT"
+        },
+        "migration_only": true
+    },
+    // Plantbatches        
+    {
+        "system": "metrc",
+        "entity": "plantbatches",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/plantbatches/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "PlantBatchTypeId": "INTEGER",
+            "PlantBatchTypeName": "VARCHAR(255)",
+            "LocationId": "INTEGER",
+            "LocationName": "VARCHAR(255)",
+            "LocationTypeName": "VARCHAR(255)",
+            "StrainId": "INTEGER",
+            "StrainName": "VARCHAR(255)",
+            "PatientLicenseNumber": "VARCHAR(255)",
+            "UntrackedCount": "INTEGER",
+            "TrackedCount": "INTEGER",
+            "PackagedCount": "INTEGER",
+            "DestroyedCount": "INTEGER",
+            "SourcePackageId": "INTEGER",
+            "SourcePackageLabel": "VARCHAR(255)",
+            "SourcePlantId": "INTEGER",
+            "SourcePlantLabel": "VARCHAR(255)",
+            "SourcePlantBatchIds": "VARIANT",
+            "SourcePlantBatchNames": "VARIANT",
+            "MultiPlantBatch": "BOOLEAN",
+            "PlantedDate": "DATE",
+            "IsOnTrip": "BOOLEAN",
+            "LastModified": "TIMESTAMP",
+            "IsOnHold": "BOOLEAN"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "plantbatches_types",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/plantbatches/v2/types?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "CanBeCloned": "BOOLEAN",
+            "LastModified": "TIMESTAMP"
+        },
+        "migration_only": true
+    },
+    // Plants
+    {
+        "system": "metrc",
+        "entity": "plants",
+        "pull_parameters": {
+            "category": [
+                "vegetative",
+                "flowering",
+                "onhold",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/plants/v2/{category}?licenseNumber={licenseNumber}",
+        "result_path": [
+            "Data"
+        ],
+        "primary_key": "Id",
+        "schema": {
+            "Id": "INTEGER",
+            "Label": "VARCHAR(255)",
+            "State": "VARCHAR(255)",
+            "GrowthPhase": "VARCHAR(255)",
+            "GroupTagTypeMax": "INTEGER",
+            "TagTypeMax": "INTEGER",
+            "PlantBatchId": "INTEGER",
+            "PlantBatchName": "VARCHAR(255)",
+            "PlantBatchTypeId": "INTEGER",
+            "PlantBatchTypeName": "VARCHAR(255)",
+            "StrainId": "INTEGER",
+            "StrainName": "VARCHAR(255)",
+            "LocationId": "INTEGER",
+            "LocationName": "VARCHAR(255)",
+            "LocationTypeName": "VARCHAR(255)",
+            "PatientLicenseNumber": "VARCHAR(255)",
+            "HarvestId": "VARCHAR(255)",
+            "HarvestedUnitOfWeightName": "VARCHAR(255)",
+            "HarvestedUnitOfWeightAbbreviation": "VARCHAR(255)",
+            "HarvestedWetWeight": "VARCHAR(255)",
+            "HarvestCount": "INTEGER",
+            "IsOnHold": "BOOLEAN",
+            "IsOnTrip": "BOOLEAN",
+            "PlantedDate": "DATE",
+            "VegetativeDate": "DATE",
+            "FloweringDate": "DATE",
+            "HarvestedDate": "DATE",
+            "DestroyedDate": "DATE",
+            "DestroyedNote": "VARCHAR(255)",
+            "DestroyedByUserName": "VARCHAR(255)",
+            "LastModified": "TIMESTAMP"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "plants_additives",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/plants/v2/additives?licenseNumber={licenseNumber}",
+        "result_path": [
+            "Data"
+        ],
+        "primary_key": "Id",
+        "schema": {
+            "AdditiveTypeName": "VARCHAR(255)",
+            "ProductTradeName": "VARCHAR(255)",
+            "EpaRegistrationNumber": "INTEGER",
+            "ProductSupplier": "VARCHAR(255)",
+            "ApplicationDevice": "VARCHAR(255)",
+            "AmountUnitOfMeasure": "VARCHAR(255)",
+            "TotalAmountApplied": "DECIMAL(38,2)",
+            "PlantBatchId": "INTEGER",
+            "PlantBatchName": "VARCHAR(255)",
+            "PlantCount": "INTEGER"
+        },
+        "migration_only": true
+    },
+    // Processing    
+    {
+        "system": "metrc",
+        "entity": "processing",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/processing/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "Number": "VARCHAR(255)",
+            "JobTypeId": "INTEGER",
+            "JobTypeName": "VARCHAR(255)",
+            "StartDate": "VARCHAR(255)",
+            "TotalCount": "DECIMAL(38,2)",
+            "CountUnitOfMeasureId": "INTEGER",
+            "CountUnitOfMeasureName": "VARCHAR(255)",
+            "CountUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "TotalVolume": "DECIMAL(38,2)",
+            "VolumeUnitOfMeasureId": "INTEGER",
+            "VolumeUnitOfMeasureName": "VARCHAR(255)",
+            "VolumeUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "TotalWeight": "DECIMAL(38,2)",
+            "WeightUnitOfMeasureId": "INTEGER",
+            "WeightUnitOfMeasureName": "VARCHAR(255)",
+            "WeightUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "TotalCountWaste": "DECIMAL(38,2)",
+            "WasteCountUnitOfMeasureId": "INTEGER",
+            "WasteCountUnitOfMeasureName": "VARCHAR(255)",
+            "WasteCountUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "TotalVolumeWaste": "DECIMAL(38,2)",
+            "WasteVolumeUnitOfMeasureId": "INTEGER",
+            "WasteVolumeUnitOfMeasureName": "VARCHAR(255)",
+            "WasteVolumeUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "TotalWeightWaste": "DECIMAL(38,2)",
+            "WasteWeightUnitOfMeasureId": "INTEGER",
+            "WasteWeightUnitOfMeasureName": "VARCHAR(255)",
+            "WasteWeightUnitOfMeasureAbbreviation": "VARCHAR(255)",
+            "Packages": "VARIANT",
+            "IsFinished": "BOOLEAN",
+            "FinishNote": "VARCHAR(255)",
+            "FinishedDate": "DATE"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "processing_jobtypes",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/processing/v2/jobtypes/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "Description": "VARCHAR(255)",
+            "CategoryName": "VARCHAR(255)",
+            "ProcessingSteps": "VARCHAR(255)",
+            "Attributes": "VARIANT" // See processing_jobtypes_attributes entity
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "processing_jobtypes_attributes",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/processing/v2/jobtypes/attributes",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "LastModified": "TIMESTAMP"
+        },
+        "migration_only": true
+    },
+    {
+        "system": "metrc",
+        "entity": "processing_jobtypes_categories",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/processing/v2/jobtypes/categories?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "ForItems": "BOOLEAN",
+            "ForProcessingJobs": "BOOLEAN",
+            "RequiresProcessingJobAttributes": "BOOLEAN"
+        },
+        "migration_only": true
+    },
+    // Strains
+    {
+        "system": "metrc",
+        "entity": "strains",
+        "pull_parameters": {
+            "category": [
+                "active",
+                "inactive"
+            ],
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/strains/v2/{category}?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [
+            "Data"
+        ],
+        "schema": {
+            "Id": "INTEGER",
+            "Name": "VARCHAR(255)",
+            "TestingStatus": "VARCHAR(255)",
+            "ThcLevel": "DECIMAL(38,2)",
+            "CbdLevel": "DECIMAL(38,2)",
+            "IndicaPercentage": "DECIMAL(38,2)",
+            "SativaPercentage": "DECIMAL(38,2)",
+            "IsUsed": "BOOLEAN",
+            "Genetics": "VARCHAR(255)"
+        },
+        "migration_only": true
+    },
+    // Tags
+    {
+        "system": "metrc",
+        "entity": "tags_plant_available",
+        "pull_parameters": {
+            "licenseNumber":"facilities.License:Number"
+        },
+        "pull_endpoint": "/tags/v2/plant/available?licenseNumber={licenseNumber}",
+        "primary_key": "Id",
+        "result_path": [],
+        "schema": {
+            "Id": "INTEGER",
+            "GroupTagTypeName": "VARCHAR(255)",
+            "TagTypeName": "VARCHAR(255)",
+            "GroupTagTypeId": "INTEGER",
+            "TagTypeId": "INTEGER",
+            "TagInventoryTypeName": "VARCHAR(255)",
+            "MaxGroupSize": "INTEGER",
+            "FacilityId": "INTEGER",
+            "Label": "VARCHAR(255)"
+        },
+        "migration_only": true
+    }
+]
